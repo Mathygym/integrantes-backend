@@ -2,13 +2,16 @@ package pe.edu.cibertec.integrantes_backend.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pe.edu.cibertec.integrantes_backend.dto.LoginResponseDTO;
 import pe.edu.cibertec.integrantes_backend.dto.LoginResquestDTO;
 import pe.edu.cibertec.integrantes_backend.service.AutenticacionService;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/autenticacion")
@@ -35,4 +38,20 @@ public class AutenticacionController {
         }
 
     }
+
+    @GetMapping("/get-integrantes")
+    public List<Map<String, String>> getIntegrantes() throws IOException {
+        List<String[]> integrantes = autenticacionService.listarIntegrantes();
+        List<Map<String, String>> response = new ArrayList<>();
+
+        for (String[] integrante : integrantes) {
+            Map<String, String> studentData = new HashMap<>();
+            studentData.put("nombres", integrante[0]);  // Names
+            studentData.put("apellidos", integrante[1]);  // Surnames
+            response.add(studentData);
+        }
+
+        return response;
+    }
+
 }
